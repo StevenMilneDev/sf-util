@@ -1,6 +1,38 @@
 @isTest(SeeAllData=false)
 private class EventBusTest
 {
+    private static TestMethod void invoker_callsMethod()
+    {
+        TestCallback fn = new TestCallback();
+
+        EventBus.Event result = EventBus.invoke(fn).now();
+        
+        System.assertEquals(1, fn.calls.size(), 'Should call the method once');
+    }
+    
+    private static TestMethod void invoker_passesArguments()
+    {
+        TestCallback fn = new TestCallback();
+        
+        EventBus.Event result = EventBus.invoke(fn)
+                                        .withArgument('x', 1)
+                                        .withArgument('y', 2)
+                                        .now();
+        
+        System.assertEquals(1, (Integer)fn.calls[0].Arguments.get('x'), 'Should pass "x" argument');
+        System.assertEquals(2, (Integer)fn.calls[0].Arguments.get('y'), 'Should pass "y" argument');
+    }
+    
+    private static TestMethod void invoker_isExceptionSafe()
+    {
+        TestCallback fn = new TestCallback();
+        fn.throwException = true;
+        
+        EventBus.Event result = EventBus.invoke(fn).now();
+        
+        System.assert(result.hasErrors(), 'Should register the exception');
+    }
+    
     private static TestMethod void observable_registersEvents()
     {
         TestObservable test = new TestObservable();
@@ -111,9 +143,9 @@ private class EventBusTest
     private static TestMethod void eventBuilder_constructusEvent()
     {
         EventBus.Event event = new EventBus.EventBuilder().withName('test')
-            										      .withArgument('x', 1)
-            										      .withArgument('y', 2)
-            										      .fire();
+                                                          .withArgument('x', 1)
+                                                          .withArgument('y', 2)
+                                                          .fire();
         
         System.assertEquals('test', event.Name, 'Should set the event name');
         System.assertEquals(2, event.Arguments.keySet().size(), 'Should set two events');
@@ -123,7 +155,7 @@ private class EventBusTest
     
     private static TestMethod void mockCallback_recordsCalls()
     {
-		TestObservable test = new TestObservable();
+        TestObservable test = new TestObservable();
         EventBus.MockCallback fn = new EventBus.MockCallback();
         
         test.addEventListener('test1', fn);
@@ -180,7 +212,7 @@ private class EventBusTest
         }
     }
     
-	private class TestObservable extends EventBus.Observable
+    private class TestObservable extends EventBus.Observable
     {
         public TestObservable()
         {
