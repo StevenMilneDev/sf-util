@@ -11,6 +11,7 @@ This is an unmanaged package and will count towards your org limits. The package
 | Version | Installation URL |
 | --- | --- |
 | 1.00 | https://login.salesforce.com/packaging/installPackage.apexp?p0=04t580000001iIn |
+| 1.1 | https://login.salesforce.com/packaging/installPackage.apexp?p0=04t580000001iN0 |
 
 ## Mocking Framework
 The mocking framework provides classes that can help abstract other classes and services out of Unit Tests and allow you to test what parameters are passed in method invocations and how many times a method is called. Any class can be mocked so long as it implements an interface. The following class will be mocked as an example.
